@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.bompracavalo.api.user.UserEntity;
+import com.bompracavalo.api.user.UserService;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
@@ -16,6 +18,9 @@ public class AuthService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private UserService userService;
 
     public String authenticateUser(String code) {
 
@@ -34,10 +39,17 @@ public class AuthService {
 
         DocumentContext documentContext = JsonPath.parse(UserInfoResponse.getBody());
 
-        String content = documentContext.read("$.*");
+        String userSub = documentContext.read("$.sub");
+        String userName = documentContext.read("$.name");
+        String userEmail = documentContext.read("$.email");
+        String userImage = documentContext.read("$.picture");
 
-        System.out.println(content);
+        UserEntity user = new UserEntity(userSub, userName, userEmail, userImage);
 
-        return content;
+        userService.saveNewUser(user);
+
+        System.out.println(userName);
+
+        return userName;
     }
 }

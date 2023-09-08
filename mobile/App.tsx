@@ -6,10 +6,10 @@ import WorkoutCard from "./src/components/WorkoutCard";
 export default function App() {
     return (
         <>
-            <View className="h-20 w-full bg-white"></View>
-            <View className="bg-white">
+            <View className="h-16 w-full bg-black shadow-lg"></View>
+            <View className="flex-1 bg-gray-900">
                 <View className="flex w-full flex-row justify-between h-10  px-4">
-                    <Text className="text-3xl text-gray-800 font-bold">A</Text>
+                    <Text className="text-3xl text-white font-bold">A</Text>
                     <TouchableOpacity>
                         <Text>Adicionar</Text>
                     </TouchableOpacity>

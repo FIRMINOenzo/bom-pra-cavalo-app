@@ -1,55 +1,71 @@
 package com.bompracavalo.api.auth;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.bompracavalo.api.user.UserEntity;
 import com.bompracavalo.api.user.UserService;
-import com.jayway.jsonpath.DocumentContext;
+import com.bompracavalo.api.util.Util;
+import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 
 @Service
 public class AuthService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
     private UserService userService;
 
-    public String authenticateUser(String code) {
+    public String authenticateUser(String accessToken) {
+        try {
+            URL url = new URL("https://www.googleapis.com/oauth2/v3/userinfo");
 
-        String getUserInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo";
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        HttpHeaders header = new HttpHeaders();
-        header.set("Authorization", String.format("Bearer %s", code));
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
 
-        HttpEntity<String> entity = new HttpEntity<>("", header);
+            // HttpHeaders headers = new HttpHeaders();
+            // headers.set("Authorization", "Bearer " + accessToken);
 
-        ResponseEntity<String> UserInfoResponse = restTemplate.exchange(
-                getUserInfoURL,
-                HttpMethod.GET,
-                entity,
-                String.class);
+            // HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        DocumentContext documentContext = JsonPath.parse(UserInfoResponse.getBody());
+            // ResponseEntity<String> userInfoResponse = restTemplate.exchange(
+            // getUserInfoURL,
+            // HttpMethod.GET,
+            // entity,
+            // String.class);
 
-        String userSub = documentContext.read("$.sub");
-        String userName = documentContext.read("$.name");
-        String userEmail = documentContext.read("$.email");
-        String userImage = documentContext.read("$.picture");
+            if (connection.getResponseCode() == 200) {
 
-        UserEntity user = new UserEntity(userSub, userName, userEmail, userImage);
+                BufferedReader response = new BufferedReader(new InputStreamReader((connection.getInputStream())));
 
-        userService.saveNewUser(user);
+                String jsonToString = Util.convertJsonToString(response);
 
-        System.out.println(userName);
+                Gson gson = new Gson();
+                UserEntity user = gson.fromJson(jsonToString, UserEntity.class);
 
-        return userName;
+                userService.saveNewUser(user);
+
+                return user.toString();
+            } else {
+                System.out.println("Chamada != 200 OK");
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

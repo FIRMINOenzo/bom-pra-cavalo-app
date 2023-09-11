@@ -62,4 +62,10 @@ public class UserEntity {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity [sub=" + sub + ", name=" + name + ", email=" + email + ", image=" + image + "]";
+    }
+
 }

@@ -1,7 +1,11 @@
 package com.bompracavalo.api.user;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, String> {
-    boolean findBySub(String sub);
+    Optional<UserEntity> findBySub(String sub);
+
+    Optional<UserEntity> findByEmail(String email);
 }

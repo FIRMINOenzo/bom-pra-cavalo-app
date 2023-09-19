@@ -10,7 +10,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public void saveNewUser(UserEntity user) {
-        if (!userRepository.findBySub(user.getSub())) {
+        if (!userRepository.findBySub(user.getSub()).isPresent()) {
             userRepository.save(user);
         }
     }

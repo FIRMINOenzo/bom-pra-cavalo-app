@@ -1,4 +1,4 @@
-package com.bompracavalo.api.user;
+package com.bompracavalo.api.models.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.bompracavalo.api.user.UserRepository;
+import com.bompracavalo.api.models.user.UserRepository;
 
 @Configuration
 public class AppConfig {

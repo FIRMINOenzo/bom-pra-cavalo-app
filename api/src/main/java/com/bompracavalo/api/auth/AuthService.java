@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.bompracavalo.api.auth.dtos.AuthenticationResponse;
 import com.bompracavalo.api.config.JwtService;
-import com.bompracavalo.api.user.RoleEntity;
-import com.bompracavalo.api.user.UserEntity;
-import com.bompracavalo.api.user.UserService;
+import com.bompracavalo.api.models.user.RoleEntity;
+import com.bompracavalo.api.models.user.UserEntity;
+import com.bompracavalo.api.models.user.UserService;
 import com.bompracavalo.api.util.Util;
 import com.google.gson.Gson;
 

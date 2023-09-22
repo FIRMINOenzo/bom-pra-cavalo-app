@@ -1,4 +1,4 @@
-package com.bompracavalo.api.user;
+package com.bompracavalo.api.models.user;
 
 import java.util.Collection;
 import java.util.List;
